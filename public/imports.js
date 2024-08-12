@@ -1,7 +1,13 @@
+/* Hosted on Cloudflare, source at https://github.com/jevawin/silent-cdn */
+/* Email 07tropes.galleys@icloud.com for access */
 (async () => {
+  // local dev
+  const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
+
   // import path-specific script
   try {
-    const url = `https://silent-cdn.pages.dev${document.location.pathname}/index.js`;
+    const url = `${host}${document.location.pathname}/index.js`;
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
@@ -15,7 +21,7 @@
 
   // import path-specific stylesheet
   try {
-    const url = `https://silent-cdn.pages.dev${document.location.pathname}/index.css`;
+    const url = `${host}${document.location.pathname}/index.css`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);

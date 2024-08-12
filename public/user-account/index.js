@@ -1,6 +1,9 @@
+// local dev
+const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
+
 // import airtable browser
 let airtableBrowser = document.createElement("script");
-airtableBrowser.src = "https://silent-cdn.pages.dev/airtable.browser.js";
+airtableBrowser.src = `${host}/airtable.browser.js`;
 document.head.appendChild(airtableBrowser);
 
 let Airtable = null;
@@ -8,13 +11,28 @@ let base = null;
 /*
   
   */
-// dom ready
+// run when ready
 const ready = (fn) => {
-  if (document.readyState !== "loading") {
-    fn();
-  } else {
-    document.addEventListener("DOMContentLoaded", fn);
-  }
+  // dom ready
+  const dom = new Promise((resolve) => {
+    if (document.readyState !== "loading") {
+      resolve();
+    } else {
+      document.addEventListener("DOMContentLoaded", resolve);
+    }
+  });
+
+  // check airtable loaded
+  const airtable = new Promise((resolve, reject) => {
+    let counter = 0;
+    const checker = setInterval(() => {
+      if (typeof require === "function") resolve();
+      if (++counter === 50) reject("Unable to load Airtable");
+    }, 100);
+  });
+
+  // run when all ready
+  Promise.all([dom, airtable]).then(fn);
 };
 /*
   
@@ -58,7 +76,7 @@ const errorHandler = (error) => {
   // log for debugging
   console.error(error);
   // notify user of error
-  document.querySelector(".submit-messages.error").style.visibility = "block";
+  document.querySelector(".submit-message.error").style.display = "block";
   // TODO 2. email self AIRTABLE
 };
 /*
@@ -129,20 +147,20 @@ const updateAirtable = (id, formData) => {
         {
           id: id,
           fields: {
-            Email: formData.email,
+            // Email: formData.email,
             Name: formData.name,
             "Job post emails": formData.job_notifications,
             "Job summary emails": formData.job_summary,
           },
         },
       ],
-      (err, records) => {
+      (err) => {
         if (err) {
           errorHandler(err);
           reject(err);
         }
         // notify user of success
-        document.querySelector(".submit-messages.success").style.visibility = "block";
+        document.querySelector(".submit-message.success").style.display = "block";
         resolve;
       }
     );
@@ -155,7 +173,7 @@ const updateAirtable = (id, formData) => {
 const watchForSubmit = async (id) => {
   document.forms[0].addEventListener("submit", async (event) => {
     // clear error messages
-    document.querySelector(".submit-messages").style.visibility = "hidden";
+    document.querySelectorAll(".submit-message").forEach((el) => (el.style.display = "none"));
     // get form data
     let formData = getFormData();
     let updated = formData === null ? false : await updateAirtable(id, formData);
