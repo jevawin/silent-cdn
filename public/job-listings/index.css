@@ -1,0 +1,104 @@
+/* hide editor content */
+body:not(.wf-design-mode) .editor-only {
+  display: none;
+}
+
+/* hide bottom border from last job row */
+.jobs-container .job-row:last-child {
+  border-bottom: none;
+}
+
+/* alternating job rows */
+.job-row.job-record:nth-child(even) {
+  background-color: rgba(95, 77, 213, 0.1);
+}
+
+/* show job detail on more details click CALC-SIZE */
+@supports (height: calc-size(auto)) {
+  .job-detail-content {
+    height: 0;
+  }
+
+  a.job-more-details-link.active ~ .job-detail-content {
+    height: calc-size(auto);
+  }
+}
+
+/* show job detail on more details click NO CALC-SIZE */
+@supports not (height: calc-size(auto)) {
+  .job-detail-content {
+    max-height: 0;
+  }
+
+  a.job-more-details-link.active ~ .job-detail-content {
+    max-height: 500px;
+  }
+}
+
+a.job-more-details-link.active img {
+  transform: rotate(180deg);
+}
+
+/* loading animation */
+@keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes flickerAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.loading {
+  -webkit-animation: flickerAnimation 1s infinite;
+  -moz-animation: flickerAnimation 1s infinite;
+  -o-animation: flickerAnimation 1s infinite;
+  animation: flickerAnimation 1s infinite;
+}

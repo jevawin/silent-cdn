@@ -10,7 +10,7 @@
     scriptTag.src = url;
     document.head.appendChild(scriptTag);
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
 
   // import path-specific stylesheet
@@ -25,6 +25,6 @@
     styleTag.href = url;
     document.head.appendChild(styleTag);
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
 })();
