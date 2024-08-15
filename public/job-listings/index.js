@@ -1,30 +1,44 @@
+// local dev
+const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
+
+// import airtable browser
+let airtableBrowser = document.createElement("script");
+airtableBrowser.src = `${host}/airtable.browser.js`;
+document.head.appendChild(airtableBrowser);
+
 // import add to calendar button
 let addToCal = document.createElement("script");
 addToCal.src = "https://cdn.jsdelivr.net/npm/add-to-calendar-button@2";
 document.head.appendChild(addToCal);
 
-// import airtable browser
-let airtableBrowser = document.createElement("script");
-airtableBrowser.src = "https://silent-cdn.pages.dev/airtable.browser.js";
-document.head.appendChild(airtableBrowser);
-
 let Airtable = null;
 let base = null;
 let mdcUserData = {};
-/*
-    
-    */
-// dom ready
+
+// run when ready
 const ready = (fn) => {
-  if (document.readyState !== "loading") {
-    fn();
-  } else {
-    document.addEventListener("DOMContentLoaded", fn);
-  }
+  // dom ready
+  const dom = new Promise((resolve) => {
+    if (document.readyState !== "loading") {
+      resolve();
+    } else {
+      document.addEventListener("DOMContentLoaded", resolve);
+    }
+  });
+
+  // check airtable loaded
+  const airtable = new Promise((resolve, reject) => {
+    let counter = 0;
+    const checker = setInterval(() => {
+      if (typeof require === "function") resolve();
+      if (++counter === 50) reject("Unable to load Airtable");
+    }, 100);
+  });
+
+  // run when all ready
+  Promise.all([dom, airtable]).then(fn);
 };
-/*
-    
-    */
+
 // run on ready
 ready(async () => {
   Airtable = require("airtable");
@@ -42,9 +56,7 @@ ready(async () => {
   // run with user ID
   loadRecords(airtableID);
 });
-/*
-    
-    */
+
 // remove :focus from more details link on click
 const moreDetailsClicks = () => {
   document.querySelectorAll(".job-more-details-link").forEach((el) => {
@@ -53,9 +65,7 @@ const moreDetailsClicks = () => {
     });
   });
 };
-/*
-    
-    */
+
 // check application status
 const canApply = (id) => {
   return new Promise((resolve, reject) => {
@@ -72,9 +82,7 @@ const canApply = (id) => {
     });
   });
 };
-/*
-    
-    */
+
 // send application to airtable
 const updateAirtable = (id, revoke) => {
   return new Promise((resolve, reject) => {
@@ -98,9 +106,7 @@ const updateAirtable = (id, revoke) => {
     );
   });
 };
-/*
-    
-    */
+
 // button listeners for apply, refresh
 const buttonListeners = (selector) => {
   // apply buttons
@@ -145,9 +151,7 @@ const buttonListeners = (selector) => {
     loadRecords();
   });
 };
-/*
-    
-    */
+
 // date time functions
 const getDateTimes = (appointmentDate, appointmentDuration) => {
   const dateTime = new Date(appointmentDate);
@@ -208,9 +212,7 @@ const getDateTimes = (appointmentDate, appointmentDuration) => {
     },
   };
 };
-/*
-    
-    */
+
 // one: inject user account iframe
 const userAccount = () => {
   return new Promise((resolve, reject) => {
@@ -222,9 +224,7 @@ const userAccount = () => {
     iframe.addEventListener("load", resolve(iframe));
   });
 };
-/*
-    
-    */
+
 // two: pull email address from /user-account
 const getEmail = (iframe) => {
   return new Promise((resolve, reject) => {
@@ -242,9 +242,7 @@ const getEmail = (iframe) => {
     }, 300); // polls every 300ms for email address
   });
 };
-/*
-    
-    */
+
 // three: pull user record id from airtable
 const getUserID = (email) => {
   return new Promise((resolve, reject) => {
@@ -281,9 +279,7 @@ const getUserID = (email) => {
       );
   });
 };
-/*
-    
-    */
+
 // four: load records from airtable
 const loadRecords = async (aID) => {
   try {
