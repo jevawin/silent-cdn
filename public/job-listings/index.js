@@ -45,6 +45,8 @@ ready(async () => {
   base = new Airtable({
     apiKey: "patXGH9KFBe0KbA4w.fbd74bf1f061b8085eb679cbfe7a8bee445d3dda86181d75ff5281681bccce59",
   }).base("appVvBBcXMR0P1Lo6");
+  // track refresh
+  refreshNowClicks();
   // track more details clicks
   moreDetailsClicks();
   // inject iframe to user account
@@ -56,6 +58,15 @@ ready(async () => {
   // run with user ID
   loadRecords(airtableID);
 });
+
+// track refresh clicks
+const refreshNowClicks = () => {
+  // refresh link
+  let refresh = document.querySelector("[data-refresh-jobs]");
+  refresh.addEventListener("click", () => {
+    loadRecords();
+  });
+};
 
 // remove :focus from more details link on click
 const moreDetailsClicks = () => {
@@ -144,11 +155,6 @@ const buttonListeners = (selector) => {
       // refresh records
       loadRecords();
     });
-  });
-  // refresh link
-  let refresh = document.querySelector("[data-refresh-jobs]");
-  refresh.addEventListener("click", () => {
-    loadRecords();
   });
 };
 
