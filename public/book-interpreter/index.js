@@ -62,7 +62,7 @@ const submitHandler = async () => {
 // errors? show error message
 const successHandler = () => {
   // hide form
-  document.querySelector("#wf-form-interpreter-request").style.display = "none";
+  document.querySelector("#wf-form-interpreter-booking-form").style.display = "none";
   // show success
   document.querySelector(".success-message").style.display = "block";
 };
@@ -70,7 +70,7 @@ const successHandler = () => {
 // errors? show error message
 const errorHandler = (error) => {
   // hide form
-  document.querySelector("#wf-form-interpreter-request").style.display = "none";
+  document.querySelector("#wf-form-interpreter-booking-form").style.display = "none";
   // show error message
   document.querySelector(".error-message").style.display = "block";
   // console log for debugging
@@ -173,7 +173,7 @@ Webflow.push(function () {
   // unbind webflow form handling
   $(document).off("submit");
   // new form handling
-  $("#wf-form-interpreter-request").submit((event) => {
+  $("#wf-form-interpreter-booking-form").submit((event) => {
     event.preventDefault();
     submitHandler();
   });

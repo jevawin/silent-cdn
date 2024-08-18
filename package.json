@@ -1,5 +1,15 @@
 {
-  "dependencies": {
-    "wrangler": "^3.70.0"
+  "name": "silent-cdn",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx wrangler pages dev ./public"
+  },
+  "keywords": [],
+  "author": "Jamie Evawin",
+  "license": "ISC",
+  "description": "Hosting some files for Manchester Deaf Centre website.",
+  "devDependencies": {
+    "wrangler": "^3.72.0"
   }
 }
