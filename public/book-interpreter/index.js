@@ -174,6 +174,13 @@ Webflow.push(function () {
   $(document).off("submit");
   // new form handling
   $("#wf-form-interpreter-booking-form").submit((event) => {
+    // disable submit button
+    let submitBtn = document.querySelector('[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = 0.6;
+    submitBtn.value = "Submitting...";
+
+    // manually send form to airtable
     event.preventDefault();
     submitHandler();
   });
