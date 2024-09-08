@@ -90,6 +90,9 @@ const getFormData = () => {
     formData.duration = `${document.querySelector("select[name='Duration-Hours']").value}h${
       document.querySelector("select[name='Duration-Minutes']").value
     }m`;
+    formData.clientName = `${document.querySelector("input[name='Client-forename']").value} ${
+      document.querySelector("input[name='Client-surname']").value
+    }`;
     formData.accessToWork = document.querySelector("input[name='Access-to-work']:checked").value;
     formData.gender = document.querySelector("input[name='Interpreter-gender']:checked").value;
     formData.appointmentDate = document.querySelector("input[name='Appointment-Date']").value;
@@ -123,6 +126,7 @@ const createJobRecord = (formData) => {
             Service: formData.service,
             "Appointment kind": formData.appointmentKind,
             "Appointment details": formData.appointmentDetails,
+            "Client name": formData.clientName,
             "Access to work": formData.accessToWork,
             "Interpreter gender": formData.gender,
             "Appointment date": formData.appointmentDate,
