@@ -1,10 +1,8 @@
 /* Hosted on Cloudflare, source at https://github.com/jevawin/silent-cdn */
 /* Email 07tropes.galleys@icloud.com for access */
+// local dev
+const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages.dev";
 (async () => {
-  // local dev
-  // const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
-  const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages.dev";
-
   // import path-specific script
   try {
     const url = `${host}${document.location.pathname}/index.js`;
