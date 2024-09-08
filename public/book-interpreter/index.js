@@ -1,6 +1,3 @@
-// local dev
-const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
-
 // import airtable browser
 let airtableBrowser = document.createElement("script");
 airtableBrowser.src = `${host}/airtable.browser.js`;
@@ -93,7 +90,7 @@ const getFormData = () => {
     formData.duration = `${document.querySelector("select[name='Duration-Hours']").value}h${
       document.querySelector("select[name='Duration-Minutes']").value
     }m`;
-    formData.rightToWork = document.querySelector("input[name='Right-to-work']:checked").value;
+    formData.accessToWork = document.querySelector("input[name='Access-to-work']:checked").value;
     formData.gender = document.querySelector("input[name='Interpreter-gender']:checked").value;
     formData.appointmentDate = document.querySelector("input[name='Appointment-Date']").value;
     formData.addressOne = document.querySelector("input[name='Address-line-1']").value;
@@ -126,7 +123,7 @@ const createJobRecord = (formData) => {
             Service: formData.service,
             "Appointment kind": formData.appointmentKind,
             "Appointment details": formData.appointmentDetails,
-            "Right to work": formData.rightToWork,
+            "Access to work": formData.accessToWork,
             "Interpreter gender": formData.gender,
             "Appointment date": formData.appointmentDate,
             Duration: formData.duration,

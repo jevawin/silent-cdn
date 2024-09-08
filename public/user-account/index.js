@@ -1,6 +1,3 @@
-// local dev
-const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
-
 // import airtable browser
 let airtableBrowser = document.createElement("script");
 airtableBrowser.src = `${host}/airtable.browser.js`;
