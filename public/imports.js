@@ -2,7 +2,8 @@
 /* Email 07tropes.galleys@icloud.com for access */
 (async () => {
   // local dev
-  const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
+  // const host = document.querySelector("[data-js-imports-host]").dataset.jsImportsHost;
+  const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages.dev";
 
   // import path-specific script
   try {
