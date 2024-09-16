@@ -6,11 +6,14 @@ const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages
 
 // newrelic error monitoring
 const nrScript = document.createElement("script");
+let nrError = null;
 nrScript.src = `${host}/newrelic.js`;
-document.head.appendChild(nrScript);
-const nrError = (error) => {
-  newrelic.noticeError(new Error(error));
+nrScript.onload = () => {
+  nrError = (error) => {
+    newrelic.noticeError(new Error(error));
+  };
 };
+document.head.appendChild(nrScript);
 
 (async () => {
   // import path-specific script
