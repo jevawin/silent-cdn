@@ -1,7 +1,14 @@
 /* Hosted on Cloudflare, source at https://github.com/jevawin/silent-cdn */
 /* Email 07tropes.galleys@icloud.com for access */
+
 // local dev
 const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages.dev";
+
+// newrelic error monitoring
+const newrelic = document.createElement("script");
+newrelic.src = `${host}/newrelic.js`;
+document.head.appendChild(newrelic);
+
 (async () => {
   // import path-specific script
   try {
