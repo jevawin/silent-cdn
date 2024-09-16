@@ -70,9 +70,8 @@ const errorHandler = (error) => {
   document.querySelector("#wf-form-interpreter-booking-form").style.display = "none";
   // show error message
   document.querySelector(".error-message").style.display = "block";
-  // console log for debugging
-  console.error(error);
-  // TODO 2. email self MAILGUN
+  // senderror to New Relic
+  nrError(error);
 };
 
 // get form data

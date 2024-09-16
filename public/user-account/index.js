@@ -70,11 +70,10 @@ const getFormData = () => {
   */
 // errors? show error message
 const errorHandler = (error) => {
-  // log for debugging
-  console.error(error);
   // notify user of error
   document.querySelector(".submit-message.error").style.display = "block";
-  // TODO 2. email self AIRTABLE
+  // send error to New Relic
+  nrError(error);
 };
 /*
   

@@ -74,12 +74,17 @@ const moreDetailsClicks = () => {
   });
 };
 
+// errors to New Relic
+const errorHandler = (error) => {
+  nrError(error);
+}
+
 // check application status
 const canApply = (id) => {
   return new Promise((resolve, reject) => {
     base("Jobs").find(id, function (err, record) {
       if (err) {
-        console.error(err);
+        errorHandler(err);
         reject("Error, please call MDC");
       }
       if (
@@ -106,7 +111,7 @@ const updateAirtable = (id, revoke) => {
       ],
       function (err, records) {
         if (err) {
-          console.error(err);
+          errorHandler(err);
           reject("Error, please call MDC");
         }
         resolve(true);
@@ -269,7 +274,7 @@ const getUserID = (email) => {
         },
         function done(err) {
           if (err) {
-            console.error(err);
+            errorHandler(err);
             reject();
           }
           // save for later
@@ -417,7 +422,7 @@ const loadRecords = async (aID) => {
               }
             });
           } catch (error) {
-            console.error(`Error in building jobs table: ${error}`);
+            errorHandler(`Error in building jobs table: ${error}`);
           }
           // To fetch the next page of records, call `fetchNextPage`.
           // If there are more records, `page` will get called again.
@@ -426,7 +431,7 @@ const loadRecords = async (aID) => {
         },
         function done(err) {
           if (err) {
-            console.error(`Error in Airtable: ${err}`);
+            errorHandler(`Error in Airtable: ${err}`);
             return;
           }
           // add button listeners
@@ -449,6 +454,6 @@ const loadRecords = async (aID) => {
         }
       );
   } catch (error) {
-    console.log(`Table update error: ${error}`);
+    errorHandler(`Table update error: ${error}`);
   }
 };
