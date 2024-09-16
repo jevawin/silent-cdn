@@ -5,9 +5,12 @@
 const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages.dev";
 
 // newrelic error monitoring
-const nrscript = document.createElement("script");
-nrscript.src = `${host}/newrelic.js`;
-document.head.appendChild(nrscript);
+const nrScript = document.createElement("script");
+nrScript.src = `${host}/newrelic.js`;
+document.head.appendChild(nrScript);
+const nrError = (error) => {
+  newrelic.noticeError(new Error(error));
+};
 
 (async () => {
   // import path-specific script
@@ -16,7 +19,7 @@ document.head.appendChild(nrscript);
 
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+      nrError(response.status);
     }
     const scriptTag = document.createElement("script");
     scriptTag.src = url;
@@ -30,13 +33,13 @@ document.head.appendChild(nrscript);
     const url = `${host}${document.location.pathname}/index.css`;
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+      nrError(response.status);
     }
     const styleTag = document.createElement("link");
     styleTag.rel = "stylesheet";
     styleTag.href = url;
     document.head.appendChild(styleTag);
   } catch (error) {
-    console.log(error.message);
+    nrError(error.message);
   }
 })();
