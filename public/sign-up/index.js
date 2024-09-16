@@ -36,6 +36,11 @@ const init = async () => {
   base = new Airtable({
     apiKey: "patXGH9KFBe0KbA4w.fbd74bf1f061b8085eb679cbfe7a8bee445d3dda86181d75ff5281681bccce59",
   }).base("appVvBBcXMR0P1Lo6");
+  // set values for registration organisation
+  document.querySelector("[data-airtable-name='Registration organisation']").value = "NRCPD";
+  document.querySelector("#NRCPD-registered").addEventListener("click", event => { 
+    document.querySelector("[data-airtable-name='Registration organisation']").value = event.currentTarget.checked ? "" : "NRCPD";
+  });
   // update airtable record on submit
   watchForSubmit();
 };
