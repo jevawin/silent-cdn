@@ -4,7 +4,10 @@
 // local dev
 const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages.dev";
 
-// importer
-const importer = document.createElement("script");
-importer.src = `${host}/importer.js`;
-document.head.appendChild(importer);
+// don't run in iframes
+if (window.top.location.pathname === document.location.pathname) {
+  // importer
+  const importer = document.createElement("script");
+  importer.src = `${host}/importer.js`;
+  document.head.appendChild(importer);
+}
