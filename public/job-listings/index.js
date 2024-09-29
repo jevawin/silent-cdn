@@ -336,10 +336,14 @@ const loadRecords = async (aID) => {
       })
       .eachPage(
         function page(records, fetchNextPage) {
-          console.log(records.length);
+          console.log(records);
           try {
             // hide loading row
             document.querySelectorAll(".loading").forEach((node) => (node.style.display = "none"));
+
+            // hide empty row
+            document.querySelectorAll(".empty").forEach((node) => (node.style.display = "none"));
+
             // loop through returned records
             records.forEach(function (record) {
               const isOpen = record.get("Status") === "Booking posted";
@@ -424,6 +428,11 @@ const loadRecords = async (aID) => {
                   received.appendChild(newRow);
                 }
               }
+            });
+
+            // show empty row if empty
+            [open, approved, received].forEach(el => { 
+              if (el.querySelectorAll("div.job-row").length === 4) el.querySelector(".job-row.empty").style.display = "block";
             });
           } catch (error) {
             errorHandler(`Error in building jobs table: ${error}`);

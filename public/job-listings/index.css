@@ -3,6 +3,11 @@ body:not(.wf-design-mode) .editor-only {
   display: none;
 }
 
+/* hide empty job row */
+.jobs-container .job-row.empty {
+  display: none;
+}
+
 /* hide bottom border from last job row */
 .jobs-container .job-row:last-child {
   border-bottom: none;
