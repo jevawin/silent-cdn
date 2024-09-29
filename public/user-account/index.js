@@ -40,16 +40,44 @@ const init = async () => {
   base = new Airtable({
     apiKey: "patXGH9KFBe0KbA4w.fbd74bf1f061b8085eb679cbfe7a8bee445d3dda86181d75ff5281681bccce59",
   }).base("appVvBBcXMR0P1Lo6");
+
+  // disable organisation details
+  disableOrganisationDetails();
+
   // get email from page
   let email = await getEmail();
+
   // get id from airtable
   let id = email ? await getUserID(email) : false;
+
   // update airtable record on submit
   if (id) watchForSubmit(id);
 };
-/*
-  
-  */
+
+// disable organisation details
+const disableOrganisationDetails = () => {
+  // disable
+  document.querySelector("#registration-organisation").disabled = true;
+  document.querySelector("#registration-number").disabled = true;
+
+  // unlock to change
+  const editRegistration = document.createElement("a");
+  editRegistration.textContent = "Edit registration details";
+  editRegistration.id = "edit-registration";
+  editRegistration.href = "#";
+  editRegistration.onclick = event => {
+    // disable #
+    event.preventDefault();
+    // enable registration editing
+    document.querySelector("#registration-organisation").disabled = false;
+    document.querySelector("#registration-number").disabled = false;
+    editRegistration.style.display = "none";
+  }
+  document
+    .querySelector("#registration-number")
+    .insertAdjacentElement("afterend", editRegistration);
+};
+
 // get form data
 const getFormData = () => {
   try {
@@ -58,6 +86,7 @@ const getFormData = () => {
       name: document.querySelector("#name").value,
       job_notifications: document.querySelector("#job-notification-email").checked,
       job_summary: document.querySelector("#job-summary-email").checked,
+      calendar_invites: document.querySelector("#calendar-invites").checked,
     };
     return formData;
   } catch (error) {
@@ -65,9 +94,7 @@ const getFormData = () => {
     return null;
   }
 };
-/*
-  
-  */
+
 // errors? show error message
 const errorHandler = (error) => {
   // notify user of error
@@ -75,9 +102,7 @@ const errorHandler = (error) => {
   // send error to New Relic
   nrError(error);
 };
-/*
-  
-  */
+
 // poll for email
 const getEmail = () => {
   return new Promise((resolve, reject) => {
@@ -97,9 +122,7 @@ const getEmail = () => {
     }, 100);
   });
 };
-/*
-  
-  */
+
 // get user id
 const getUserID = (email) => {
   return new Promise((resolve, reject) => {
@@ -132,9 +155,7 @@ const getUserID = (email) => {
       );
   });
 };
-/*
-  
-  */
+
 // update user record
 const updateAirtable = (id, formData) => {
   return new Promise((resolve, reject) => {
@@ -147,6 +168,7 @@ const updateAirtable = (id, formData) => {
             Name: formData.name,
             "Job post emails": formData.job_notifications,
             "Job summary emails": formData.job_summary,
+            "Calendar invites": formData.calendar_invites,
           },
         },
       ],
@@ -162,9 +184,7 @@ const updateAirtable = (id, formData) => {
     );
   });
 };
-/*
-  
-  */
+
 // watch submit
 const watchForSubmit = async (id) => {
   document.forms[0].addEventListener("submit", async (event) => {
@@ -176,8 +196,6 @@ const watchForSubmit = async (id) => {
     if (!updated) errorHandler("Error updating Airtable");
   });
 };
-/*
-  
-  */
+
 // init on ready
 ready(init);
