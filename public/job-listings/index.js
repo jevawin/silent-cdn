@@ -128,8 +128,8 @@ const buttonListeners = (selector) => {
     button.addEventListener("click", async (el) => {
       // set to applying state
       el.currentTarget.innerText = "On it...";
-      el.currentTarget.style.opacity = 0.5;
-      el.currentTarget.disabled = true;
+      // disable all buttons
+      buttons.forEach(button => { button.disabled = true; button.style.opacity = 0.5; })
       // get record, revoke, and apply in airtable
       const recordId = el.currentTarget.dataset.record;
       const revoke = el.currentTarget.dataset.revoke === "true";
