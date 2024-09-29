@@ -149,7 +149,10 @@ const buttonListeners = (selector) => {
                 });
             }
           })
-          .catch((err) => alert("Application error, please contact MDC to apply."));
+          .catch((err) => {
+            errorHandler(`Error applying for job: ${err}`)
+            alert("Something went wrong, please contact MDC to apply. We'll fix the error as soon as possible.")
+          });
       } else {
         // tell user someone already applied
         alert("Sorry, this job is no longer available.");
@@ -239,7 +242,7 @@ const getEmail = (iframe) => {
     let pollForEmail = setInterval(() => {
       let user = iframe.contentDocument || iframe.contentWindow.document;
       if (!user) {
-        throw "iframe couldn't be found in DOM.";
+        errorHandler("iframe couldn't be found in DOM.");
       }
       let email = user.querySelector("input[name='Email']");
       if (email && email.value) {
@@ -333,6 +336,7 @@ const loadRecords = async (aID) => {
       })
       .eachPage(
         function page(records, fetchNextPage) {
+          console.log(records.length);
           try {
             // hide loading row
             document.querySelectorAll(".loading").forEach((node) => (node.style.display = "none"));
