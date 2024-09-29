@@ -21,7 +21,14 @@ document.head.appendChild(nrScript);
       // if exists, import
       if (response.ok) {
         const tag = document.createElement(`${file === "index.js" ? "script" : "link"}`);
-        tag.src = url;
+        if (tag.nodeName === "SCRIPT") {
+          // scripts
+          tag.src = url;
+        } else {
+          // stylesheets
+          tag.rel = "stylesheet";
+          tag.href = url;
+        }
         document.head.appendChild(tag);
       }
     });
