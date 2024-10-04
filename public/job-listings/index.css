@@ -1,6 +1,6 @@
 /* prevent add to calendar button from moving to another row */
 @media screen and (max-width: 479px) {
-  [data-applications-received] .job-more-details-link {
+  [data-applications-approved] .job-more-details-link {
     flex: 0 0 45%;
   }
 }
