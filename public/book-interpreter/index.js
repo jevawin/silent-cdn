@@ -93,81 +93,88 @@ const errorHandler = (error) => {
 
 // get form data
 const getFormData = () => {
-  let formData = {};
-  try {
-    formData.status = "New request";
-    formData.service = document.querySelector("input[name='Service']:checked").value;
-    formData.appointmentKind = document.querySelector(
-      "input[name='appointment-kind']:checked"
-    ).value;
-    formData.appointmentDetails = document.querySelector(
-      "textarea[name='Appointment-details']"
-    ).value;
-    formData.duration = `${document.querySelector("select[name='Duration-Hours']").value}h${
-      document.querySelector("select[name='Duration-Minutes']").value
-    }m`;
-    formData.clientName = `${document.querySelector("input[name='Client-forename']").value} ${
-      document.querySelector("input[name='Client-surname']").value
-    }`;
-    formData.accessToWork = document.querySelector("input[name='Access-to-work']:checked").value;
-    formData.gender = document.querySelector("input[name='Interpreter-gender']:checked").value;
-    formData.appointmentDate = document.querySelector("input[name='Appointment-Date']").value;
-    formData.addressOne = document.querySelector("input[name='Address-line-1']").value;
-    formData.addressTwo = document.querySelector("input[name='Address-line-2']").value;
-    formData.city = document.querySelector("input[name='City-Town']").value;
-    formData.postCode = document.querySelector("input[name='Postcode']").value;
-    formData.bookingFor = `${document.querySelector("input[name='First-Name']").value} ${
-      document.querySelector("input[name='Last-Name']").value
-    }`;
-    formData.phoneNumber = document.querySelector("input[name='Phone-number']").value;
-    formData.emailAddress = document.querySelector("input[name='Email']").value;
-    formData.bookingType = "MDC";
-    return formData;
-  } catch (error) {
-    errorHandler(error);
-    return false;
+  // form fields
+  // prettier-ignore
+  const fields = {
+    "Booker: name": "text",
+    "Appointment: service": "radio",
+    "Appointment: specialism": "radio",
+    "Appointment: details": "text",
+    "Appointment: client name": "text",
+    "Appointment: contact name": "text",
+    "Appointment: contact number": "text",
+    "Appointment: access to work": "radio",
+    "Appointment: interpreter gender": "radio",
+    "Appointment: date": "text",
+    "Appointment: duration": "special",
+    "Appointment: address 1": "text",
+    "Appointment: address 2": "text",
+    "Appointment: city": "text",
+    "Appointment: post code": "text",
+    "Booker: number": "text",
+    "Booker: email": "text",
+    "Finance: department": "radio",
+    "Finance: SIU department": "text",
+    "Finance: company name": "text",
+    "Finance: address 1": "text",
+    "Finance: address 2": "text",
+    "Finance: city": "text",
+    "Finance: post code": "text",
+    "Finance: email address": "text",
+    "Finance: PO / cost centre code": "text",
+    "Finance: additional info": "text",
+  };
+
+  // initialise form data object
+  const formData = {};
+
+  // loop through formdata and collect value
+  for (const field in fields) {
+    try {
+      switch (fields[field]) {
+        case "text":
+          formData[field] = document.querySelector(`[data-name="${field}"]`).value;
+          break;
+        case "radio":
+          formData[field] = document.querySelector(`input[data-name='${field}']:checked`).value;
+          break;
+        case "special":
+          if (field === "Appointment: duration") {
+            formData[field] =
+              document.querySelector("select[data-name='Appointment: duration hours']").value +
+              "h" +
+              document.querySelector("select[data-name='Appointment: duration minutes']").value +
+              "m";
+          }
+          break;
+        default:
+          // uh oh, this field type isn't recognised
+          throw new Error("Unknown field type");
+      }
+    } catch (error) {
+      errorHandler(`Error in field: ${field}. Error: ${error}]`);
+      return false;
+    }
   }
+
+  // return collected form data
+  return formData;
 };
 
 // create job record
 const createJobRecord = (formData) => {
   return new Promise((resolve, reject) => {
     let recordID = "";
-    base("Jobs").create(
-      [
-        {
-          fields: {
-            Status: formData.status,
-            "Booking for": formData.bookingFor,
-            Service: formData.service,
-            "Appointment kind": formData.appointmentKind,
-            "Appointment details": formData.appointmentDetails,
-            "Client name": formData.clientName,
-            "Access to work": formData.accessToWork,
-            "Interpreter gender": formData.gender,
-            "Appointment date": formData.appointmentDate,
-            Duration: formData.duration,
-            "Address line 1": formData.addressOne,
-            "Address line 2": formData.addressTwo,
-            City: formData.city,
-            Postcode: formData.postCode,
-            "Phone number": formData.phoneNumber,
-            Email: formData.emailAddress,
-            "Booking type": formData.bookingType,
-          },
-        },
-      ],
-      (error, records) => {
-        if (error) {
-          errorHandler(error);
-          resolve(null);
-        }
-        records.forEach((record) => {
-          recordID = record.getId();
-        });
-        resolve(recordID);
+    base("Jobs").create([{ fields: formData }], (error, records) => {
+      if (error) {
+        errorHandler(error);
+        resolve(null);
       }
-    );
+      records.forEach((record) => {
+        recordID = record.getId();
+      });
+      resolve(recordID);
+    });
   });
 };
 
