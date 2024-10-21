@@ -30,12 +30,29 @@ const ready = (fn) => {
   Promise.all([dom, airtable]).then(fn);
 };
 
-// initalisation function
+// initalise
 const init = async () => {
+  // set up airtable
   Airtable = require("airtable");
   base = new Airtable({
     apiKey: "patXGH9KFBe0KbA4w.fbd74bf1f061b8085eb679cbfe7a8bee445d3dda86181d75ff5281681bccce59",
   }).base("appVvBBcXMR0P1Lo6");
+
+  // listen for placeholder switching
+  placeholderSwitcher();
+};
+
+// custom placeholders
+const placeholderSwitcher = () => {
+  const placeholder = document.querySelector("[data-placeholder]");
+  const placeholderSwitchers = document.querySelectorAll("[data-placeholder-value");
+
+  // change placeholder on click of placeholderSwitcher
+  placeholderSwitchers.forEach((el) =>
+    el.addEventListener("click", (e) =>
+      placeholder.setAttribute("placeholder", e.target.dataset.placeholderValue)
+    )
+  );
 };
 
 // submitHandler
