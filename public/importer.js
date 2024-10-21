@@ -4,7 +4,13 @@ let nrError = null;
 nrScript.src = `${host}/newrelic.js`;
 nrScript.onload = () => {
   nrError = (error) => {
-    newrelic.noticeError(new Error(error));
+    if (window.localStorage.getItem("js_host")) {
+      // dev mode, console log error
+      console.error(error);
+    } else {
+      // send error to new relic
+      newrelic.noticeError(new Error(error));
+    }
   };
 };
 document.head.appendChild(nrScript);
