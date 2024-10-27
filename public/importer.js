@@ -20,9 +20,10 @@ document.head.appendChild(nrScript);
   ["index.js", "index.css"].forEach(async (file) => {
     const url = `${host}${document.location.pathname}/${file}`;
 
+    let response;
     try {
       // check if exists first
-      const response = await fetch(url, { method: "HEAD" });
+      response = await fetch(url, { method: "HEAD" });
     } catch (error) {
       nrError(error.message);
     }
