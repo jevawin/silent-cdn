@@ -17,28 +17,28 @@ document.head.appendChild(nrScript);
 
 (async () => {
   // import path-specific script and stylesheets
-  try {
-    ["index.js", "index.css"].forEach(async (file) => {
-      const url = `${host}${document.location.pathname}/${file}`;
+  ["index.js", "index.css"].forEach(async (file) => {
+    const url = `${host}${document.location.pathname}/${file}`;
 
+    try {
       // check if exists first
       const response = await fetch(url, { method: "HEAD" });
+    } catch (error) {
+      nrError(error.message);
+    }
 
-      // if exists, import
-      if (response.ok) {
-        const tag = document.createElement(`${file === "index.js" ? "script" : "link"}`);
-        if (tag.nodeName === "SCRIPT") {
-          // scripts
-          tag.src = url;
-        } else {
-          // stylesheets
-          tag.rel = "stylesheet";
-          tag.href = url;
-        }
-        document.head.appendChild(tag);
+    // if exists, import
+    if (response.ok) {
+      const tag = document.createElement(`${file === "index.js" ? "script" : "link"}`);
+      if (tag.nodeName === "SCRIPT") {
+        // scripts
+        tag.src = url;
+      } else {
+        // stylesheets
+        tag.rel = "stylesheet";
+        tag.href = url;
       }
-    });
-  } catch (error) {
-    nrError(error.message);
-  }
+      document.head.appendChild(tag);
+    }
+  });
 })();
