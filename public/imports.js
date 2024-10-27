@@ -1,8 +1,13 @@
 /* Hosted on Cloudflare, source at https://github.com/jevawin/silent-cdn */
 /* Email 07tropes.galleys@icloud.com for access */
 
+// staging || production
+let host =
+  location.hostname === "www.manchesterdeafcentre.com"
+    ? "https://silent-cdn.pages.dev"
+    : "https://staging.silent-cdn.pages.dev/";
 // local dev
-const host = window.localStorage.getItem("js_host") || "https://silent-cdn.pages.dev";
+window.localStorage.getItem("js_host") || host;
 
 // don't run in iframes
 if (window.top.location.pathname === document.location.pathname) {
