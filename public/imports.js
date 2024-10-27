@@ -5,7 +5,7 @@
 let host =
   location.hostname === "www.manchesterdeafcentre.com"
     ? "https://silent-cdn.pages.dev"
-    : "https://staging.silent-cdn.pages.dev/";
+    : "https://staging.silent-cdn.pages.dev";
 
 // local dev override
 window.localStorage.getItem("js_host") || host;
