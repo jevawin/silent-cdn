@@ -31,7 +31,6 @@ for (const [el, val] of Object.entries({
   "Finance: post code": "CA5 5HH",
   "Finance: email address": "iamjevawin+finance@gmail.com",
   "Finance: PO / cost centre code": "12345",
-  "Finance: additional info": "Please address all finance emails to Babs.",
 })) {
   document.querySelector(`[data-name="${el}"]`).value = val;
 }
