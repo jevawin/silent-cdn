@@ -8,7 +8,7 @@ let host =
     : "https://staging.silent-cdn.pages.dev";
 
 // local dev override
-window.localStorage.getItem("js_host") || host;
+host = window.localStorage.getItem("js_host") || host;
 
 // don't run in iframes
 if (window.top.location.pathname === document.location.pathname) {
