@@ -37,9 +37,43 @@ const init = async () => {
   base = new Airtable({
     apiKey: "patXGH9KFBe0KbA4w.fbd74bf1f061b8085eb679cbfe7a8bee445d3dda86181d75ff5281681bccce59",
   }).base("appVvBBcXMR0P1Lo6");
+
+  // copy buttons
+  copyHandler();
 };
 
-// submitHandler
+// copy handler
+const copyHandler = () => {
+  // grab copy buttons
+  const copyButtons = document.querySelectorAll("[data-copy-from-to");
+
+  // loop through, add listener to copy every "from" to every "to"
+  // from and to dictated by value of data-copy-from-to as comma-separated list
+  copyButtons.forEach((button) => {
+    // listen for clicks
+    button.addEventListener("click", (button) => {
+      // get array of "from" and "to"s
+      const copyFromTos = button.currentTarget.dataset.copyFromTo.split(",");
+
+      // loop through and copy from "from" to "to"
+      copyFromTos.forEach((fromTo) => {
+        // trim in case comma-separated with spaces
+        const ft = fromTo.trim();
+
+        // get from element
+        const from = document.querySelector(`[data-copy-from="${ft}"]`);
+
+        // get to element
+        const to = document.querySelector(`[data-copy-to="${ft}"]`);
+
+        // copy paste
+        to.value = from.value;
+      });
+    });
+  });
+};
+
+// submit handler
 const submitHandler = async () => {
   let recordID = null;
   let success = false;
