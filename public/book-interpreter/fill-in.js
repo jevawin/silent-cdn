@@ -1,6 +1,7 @@
 // copy below into https://chriszarate.github.io/bookmarkleter/ to convert to bookmarklet
 javascript: document.querySelector("[data-name='Appointment: service']").click();
 document.querySelector("[data-name='Appointment: specialism']").click();
+document.querySelector("[data-name='Appointment: organisation']").click();
 document.querySelector("[data-name='Appointment: duration hours']").value = 2;
 document.querySelector("[data-name='Appointment: duration minutes']").value = 30;
 document.querySelector("[data-name='Appointment: access to work'][value='No']").click();
@@ -24,6 +25,7 @@ for (const [el, val] of Object.entries({
   "Appointment: post code": "AB1 2CD",
   "Booker: number": "01234567890",
   "Booker: email": "iamjevawin+booker@gmail.com",
+  "Finance: department": "Radiotherapy",
   "Finance: company name": "Companies House",
   "Finance: address 1": "1 Government",
   "Finance: address 2": "2 House",
