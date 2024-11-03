@@ -7,7 +7,7 @@ const updateAirtable = (id, revoke) => {
           id: id,
           fields: {
             Status: revoke ? "Booking posted" : "Applications received",
-            Applications: revoke ? [] : [mdcUserData.airtable.id],
+            "Airtable: applications": revoke ? [] : [mdcUserData.airtable.id],
           },
         },
       ],
