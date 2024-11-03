@@ -13,11 +13,6 @@ body:not(.wf-design-mode) .editor-only {
   border-bottom: none;
 }
 
-/* alternating job rows */
-.job-row.job-record:nth-child(even) {
-  background-color: rgba(95, 77, 213, 0.1);
-}
-
 /* show job detail on more details click CALC-SIZE */
 @supports (height: calc-size(auto)) {
   .job-detail-content {
