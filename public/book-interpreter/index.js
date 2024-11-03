@@ -114,25 +114,25 @@ const getFormData = () => {
   // form fields
   // prettier-ignore
   const fields = {
-    "Booker: name": "text",
     "Appointment: service": "radio",
     "Appointment: specialism": "radio",
-    "Appointment: details": "text",
-    "Appointment: client name": "text",
-    "Appointment: contact name": "text",
-    "Appointment: contact number": "text",
+    "Appointment: organisation": "radio",
     "Appointment: access to work": "radio",
+    "Appointment: details": "text",
     "Appointment: interpreter gender": "radio",
     "Appointment: date": "text",
     "Appointment: duration": "special",
+    "Finance: department": "text",
     "Appointment: address 1": "text",
     "Appointment: address 2": "text",
     "Appointment: city": "text",
     "Appointment: post code": "text",
+    "Appointment: contact name": "text",
+    "Appointment: contact number": "text",
+    "Appointment: client name": "text",
+    "Booker: name": "text",
     "Booker: number": "text",
     "Booker: email": "text",
-    "Finance: department": "radio",
-    "Finance: SIU department": "text",
     "Finance: company name": "text",
     "Finance: address 1": "text",
     "Finance: address 2": "text",
@@ -140,8 +140,7 @@ const getFormData = () => {
     "Finance: post code": "text",
     "Finance: email address": "text",
     "Finance: PO / cost centre code": "text",
-    "Finance: additional info": "text",
-  }
+  };
 
   // initialise form data object
   const formData = {};
