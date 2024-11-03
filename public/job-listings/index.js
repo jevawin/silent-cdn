@@ -14,11 +14,6 @@ let imports = [
   `${host}/job-listings/lib/buildJobsTables.js`, // build tables from airtable response
   `${host}/job-listings/lib/cleanUpAfterBuild.js`, // refresh listeners, update last refresh
 ];
-imports.forEach((ref) => {
-  let script = document.createElement("script");
-  script.src = ref;
-  document.head.appendChild(script);
-});
 
 let Airtable = null;
 let base = null;
@@ -26,6 +21,22 @@ let mdcUserData = {};
 
 // run when ready
 const ready = (fn) => {
+  // promises
+  promises = [];
+
+  // imports
+  imports.forEach((ref) => {
+    promises.push(
+      new Promise((resolve, reject) => {
+        let script = document.createElement("script");
+        // resolve on script load
+        script.onload = resolve;
+        script.src = ref;
+        document.head.appendChild(script);
+      })
+    );
+  });
+
   // dom ready
   const dom = new Promise((resolve) => {
     if (document.readyState !== "loading") {
@@ -34,6 +45,7 @@ const ready = (fn) => {
       document.addEventListener("DOMContentLoaded", resolve);
     }
   });
+  promises.push(dom);
 
   // check airtable loaded
   const airtable = new Promise((resolve, reject) => {
@@ -43,9 +55,10 @@ const ready = (fn) => {
       if (++counter === 50) reject("Unable to load Airtable");
     }, 100);
   });
+  promises.push(airtable);
 
   // run when all ready
-  Promise.all([dom, airtable]).then(fn);
+  Promise.all(promises).then(fn);
 };
 
 // run on ready
