@@ -10,6 +10,6 @@
   "license": "ISC",
   "description": "Hosting some files for Manchester Deaf Centre website.",
   "devDependencies": {
-    "wrangler": "^3.72.0"
+    "wrangler": "^3.87.0"
   }
 }
