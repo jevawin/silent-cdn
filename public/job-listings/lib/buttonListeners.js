@@ -13,35 +13,61 @@ const buttonListeners = (selector) => {
       });
       // get record, revoke, and apply in airtable
       const recordId = el.currentTarget.dataset.record;
-      const revoke = el.currentTarget.dataset.revoke === "true";
-      // check not already applied
-      if ((await canApply(recordId)) === true) {
-        // update button text to notify user
-        updateAirtable(recordId, revoke)
-          .then((response) => {
-            el.target.innerText = "Success!";
-            if (!revoke) {
-              // highlight apply button
-              document.querySelector("[data-w-tab='Applied']").classList.add("highlight");
-              document
-                .querySelector("[data-w-tab='Applied']")
-                .addEventListener("click", (event) => {
-                  event.currentTarget.classList.remove("highlight");
-                });
-            }
-          })
-          .catch((err) => {
-            errorHandler(`Error applying for job: ${err}`);
-            alert(
-              "Something went wrong, please contact MDC to apply. We'll fix the error as soon as possible."
-            );
-          });
-      } else {
-        // tell user someone already applied
-        alert("Sorry, this job is no longer available.");
-      }
+      const revokeBtn = el.currentTarget.dataset.revoke === "true";
+
+      // revoke if revoke is true
+      if (revokeBtn) await revoke(recordId, el);
+
+      // otherwise apply
+      if (!revokeBtn) await apply(recordId, el);
+
       // refresh records
       loadRecords();
     });
   });
+};
+
+const apply = async (recordId, el) => {
+  // check not already applied
+  try {
+    const record = await canApply(recordId);
+
+    // handle unavailable jobs
+    if (record === "unavailable") alert("Sorry, this job is no longer available");
+
+    // if not already applied, apply
+    if (record !== "applied") await airtableApply(record);
+
+    // successfully applied so update button text to notify user
+    el.target.innerText = "Success!";
+
+    // highlight apply button
+    document.querySelector("[data-w-tab='Applied']").classList.add("highlight");
+    document.querySelector("[data-w-tab='Applied']").addEventListener("click", (event) => {
+      event.currentTarget.classList.remove("highlight");
+    });
+  } catch {
+    // notify user to call mdc
+    alert(
+      "Something went wrong, please contact MDC to apply. We'll fix the error as soon as possible."
+    );
+  }
+};
+
+const revoke = async (recordId, el) => {
+  try {
+    // revoke
+    await airtableRevoke(recordId);
+
+    // successfully revoked so update button text to notify user
+    el.target.innerText = "Success!";
+  } catch (error) {
+    // log error
+    errorHandler(`Error in revoke: ${error}`);
+
+    // notify user
+    alert(
+      "Something went wrong, please contact MDC to revoke. We'll fix the error as soon as possible."
+    );
+  }
 };

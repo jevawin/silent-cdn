@@ -5,7 +5,8 @@ let imports = [
   `${host}/job-listings/lib/refreshNowClicks.js`, // refresh link click handler
   `${host}/job-listings/lib/moreDetailsClicks.js`, // more details click handler
   `${host}/job-listings/lib/canApply.js`, // checks if interpreter can apply for job
-  `${host}/job-listings/lib/updateAirtable.js`, // apply/revoke applications
+  `${host}/job-listings/lib/airtableApply.js`, // apply
+  `${host}/job-listings/lib/airtableRevoke.js`, // revoke applications
   `${host}/job-listings/lib/buttonListeners.js`, // listens for apply / revoke buttons
   `${host}/job-listings/lib/dateTimeFunctions.js`, // formats dates and times
   `${host}/job-listings/lib/userAccount.js`, // inject user account iframe
@@ -38,24 +39,26 @@ const ready = (fn) => {
   });
 
   // dom ready
-  const dom = new Promise((resolve) => {
-    if (document.readyState !== "loading") {
-      resolve();
-    } else {
-      document.addEventListener("DOMContentLoaded", resolve);
-    }
-  });
-  promises.push(dom);
+  promises.push(
+    new Promise((resolve) => {
+      if (document.readyState !== "loading") {
+        resolve();
+      } else {
+        document.addEventListener("DOMContentLoaded", resolve);
+      }
+    })
+  );
 
   // check airtable loaded
-  const airtable = new Promise((resolve, reject) => {
-    let counter = 0;
-    const checker = setInterval(() => {
-      if (typeof require === "function") resolve();
-      if (++counter === 50) reject("Unable to load Airtable");
-    }, 100);
-  });
-  promises.push(airtable);
+  promises.push(
+    new Promise((resolve, reject) => {
+      let counter = 0;
+      const checker = setInterval(() => {
+        if (typeof require === "function") resolve();
+        if (++counter === 50) reject("Unable to load Airtable");
+      }, 100);
+    })
+  );
 
   // run when all ready
   Promise.all(promises).then(fn);
@@ -127,6 +130,7 @@ const loadRecords = async (aID) => {
           "Appointment: contact number",
           "Appointment: notes",
         ],
+        filterByFormula: "NOT({Status} = 'New request')",
       })
       .eachPage(
         function page(records, fetchNextPage) {
