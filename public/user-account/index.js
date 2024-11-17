@@ -65,14 +65,14 @@ const disableOrganisationDetails = () => {
   editRegistration.textContent = "Edit registration details";
   editRegistration.id = "edit-registration";
   editRegistration.href = "#";
-  editRegistration.onclick = event => {
+  editRegistration.onclick = (event) => {
     // disable #
     event.preventDefault();
     // enable registration editing
     document.querySelector("#registration-organisation").disabled = false;
     document.querySelector("#registration-number").disabled = false;
     editRegistration.style.display = "none";
-  }
+  };
   document
     .querySelector("#registration-number")
     .insertAdjacentElement("afterend", editRegistration);
@@ -84,9 +84,9 @@ const getFormData = () => {
     let formData = {
       email: document.querySelector("#email").value,
       name: document.querySelector("#name").value,
-      job_notifications: document.querySelector("#job-notification-email").checked,
-      job_summary: document.querySelector("#job-summary-email").checked,
-      calendar_invites: document.querySelector("#calendar-invites").checked,
+      job_notifications: document.querySelector("#job-notification-email").checked || false,
+      job_summary: document.querySelector("#job-summary-email").checked || false,
+      // calendar_invites: document.querySelector("#calendar-invites").checked,
     };
     return formData;
   } catch (error) {
