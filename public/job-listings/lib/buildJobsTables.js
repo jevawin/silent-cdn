@@ -9,28 +9,39 @@ const buildJobsTables = (open, approved, received, aID, records) => {
   records.forEach(function (record) {
     const status = (() => {
       const airtableStatus = record.get("Status");
-      const airtableApplications = record.get("Airtable: applications");
-      const hasApplied = airtableApplications && airtableApplications.includes(aID);
-      const isApproved = hasApplied && airtableStatus === "Appointment booked";
+      const airtableApplications = record.get("Airtable: applications") || [];
+      const assignedInterpreters = record.get("Airtable: assigned interpreters") || [];
+      const hasApplied = airtableApplications.includes(aID);
+      const isApproved = assignedInterpreters.includes(aID);
+      const appointmentDate = new Date(record.get("Appointment: date")).getTime();
+      const now = new Date().getTime();
+      const thirtyDaysAgo = now - 2592000000;
+      const nowFuture = appointmentDate >= now;
+      const lastThirty = !nowFuture && appointmentDate > thirtyDaysAgo;
 
-      // no applications received
-      if (airtableStatus === "Booking posted") return "open";
-
-      // applications received - not this interpreter
-      if (airtableStatus === "Applications received" && !hasApplied) return "waitlist";
-
-      // applications received - this interpreter - not approved
-      if (hasApplied && !isApproved) return "applied";
-
-      // applications received - this interpreter - approved
-      if (hasApplied && isApproved) return "approved";
-
-      // new requests
-      return null;
+      switch (airtableStatus) {
+        case "Booking posted":
+          // open job no applications
+          return "open";
+        case "Applications received":
+          // applications received, check if this user or other
+          return hasApplied ? "applied" : "open";
+        case "Appointment booked":
+          // appointment booked, check if this user or other
+          // also check date of appointment
+          if (isApproved && nowFuture) {
+            return "approved";
+          } else if (isApproved && lastThirty) {
+            return "past";
+          }
+        default:
+          // either archive or someone else has been approved so ignore
+          return null;
+      }
     })();
 
-    // ignore new requests
-    if (!status) errorHandler(`Error, this status is unknown: ${record.get("Status")}`);
+    // reject null, either old or someone else's approved job
+    if (!status) return;
 
     // set friendly appointment date and times
     // returns {date, start, end, atc: { buttonDate, buttonStart, buttonEnd }}
@@ -39,9 +50,13 @@ const buildJobsTables = (open, approved, received, aID, records) => {
       record.get("Appointment: duration")
     );
 
+    // TODO fix past display and last thirty days
+
     // status-dependent cta at end of row
     const button = (() => {
       switch (status) {
+        case "past":
+          return "<p class='job-archive'>✅ COMPLETED JOB</p>"; // no button
         case "approved":
           return buildAddToCalButton(dateTimes, record);
         case "applied":
@@ -71,6 +86,9 @@ const buildJobsTables = (open, approved, received, aID, records) => {
     // set class of job-record
     newRow.classList.add("job-record");
 
+    // set class of past for old jobs
+    if (status === "past") newRow.classList.add("past-job");
+
     // make it visible
     newRow.classList.remove("editor-only");
 
@@ -88,6 +106,9 @@ const buildJobsTables = (open, approved, received, aID, records) => {
         received.appendChild(newRow);
         break;
       case "approved":
+        approved.appendChild(newRow);
+        break;
+      case "past":
         approved.appendChild(newRow);
         break;
       default:

@@ -124,6 +124,7 @@ const loadRecords = async (aID) => {
           "Appointment: post code",
           "Status",
           "Airtable: applications",
+          "Airtable: assigned interpreters",
           "Appointment: address 1",
           "Appointment: address 2",
           "Appointment: contact name",
@@ -131,6 +132,7 @@ const loadRecords = async (aID) => {
           "Appointment: notes",
         ],
         filterByFormula: "NOT({Status} = 'New request')",
+        sort: [{ field: "Appointment: date", direction: "asc" }],
       })
       .eachPage(
         function page(records, fetchNextPage) {
