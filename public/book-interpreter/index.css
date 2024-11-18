@@ -1,1 +1,8 @@
-/* EMPTY */
+/* validation */
+.label-wrapper:has(~ * .required:invalid) label {
+  color: #d4202a;
+}
+
+form:has(.required:invalid) .global-validation-message {
+  opacity: 1;
+}

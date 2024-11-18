@@ -43,6 +43,21 @@ const init = async () => {
 
   // date functions
   dateFunctions();
+
+  // validation
+  validate();
+};
+
+// validation
+const validate = () => {
+  // listen for submit
+  document.querySelector("input[type='submit']").addEventListener("click", (event) => {
+    // add required class to each (input.required:invalid has a red border)
+    document.querySelectorAll("[required]").forEach((el) => el.classList.add("required"));
+  });
+
+  // prevent browser validation messages
+  document.addEventListener("invalid", (e) => e.preventDefault(), true);
 };
 
 // date functions
@@ -56,9 +71,9 @@ const dateFunctions = () => {
   picker.setAttribute("min", now.toISOString().slice(0, -8));
 
   // show picker on click
-  picker.addEventListener("click", (el) => {
+  picker.addEventListener("click", (event) => {
     // show picker
-    el.target.showPicker();
+    event.target.showPicker();
 
     // reset validation message
     document.querySelector(".datetime-validation-message").style.opacity = 0;
