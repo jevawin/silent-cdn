@@ -1,5 +1,6 @@
 /* validation */
-.label-wrapper:has(~ * .required:invalid) label {
+.label-wrapper:has(~ * .required:invalid) label,
+.required:invalid + .terms-label {
   color: #d4202a;
 }
 
