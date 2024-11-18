@@ -56,7 +56,22 @@ const dateFunctions = () => {
   picker.setAttribute("min", now.toISOString().slice(0, -8));
 
   // show picker on click
-  picker.addEventListener("click", (el) => el.target.showPicker());
+  picker.addEventListener("click", (el) => {
+    // show picker
+    el.target.showPicker();
+
+    // reset validation message
+    document.querySelector(".datetime-validation-message").style.opacity = 0;
+  });
+
+  // iOS ignores min so show validation and reset on date < now
+  picker.addEventListener("change", (event) => {
+    const el = event.target;
+    if (el.value < el.getAttribute("min")) {
+      // show validation message
+      document.querySelector(".datetime-validation-message").style.opacity = 1;
+    }
+  });
 };
 
 // copy handler
