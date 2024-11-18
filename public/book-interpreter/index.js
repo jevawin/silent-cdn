@@ -40,6 +40,23 @@ const init = async () => {
 
   // copy buttons
   copyHandler();
+
+  // date functions
+  dateFunctions();
+};
+
+// date functions
+const dateFunctions = () => {
+  const picker = document.querySelector("input#appointment-date");
+
+  // set default date
+  const now = new Date();
+
+  // set min and default to now
+  picker.setAttribute("min", now.toISOString().slice(0, -8));
+
+  // show picker on click
+  picker.addEventListener("click", (el) => el.target.showPicker());
 };
 
 // copy handler
